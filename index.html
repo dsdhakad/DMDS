@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DM DS | Cinematic Digital Agency</title>
+  <meta name="description" content="DM DS - Premium Digital Agency. Code, SEO, Ads, Branding. Engineered to dominate the market. Experience our cinematic digital engine.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  
+  <style>
+    /* Hero container layout styling */
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 65%),
+                  #0c0f17;
+    }
+
+    .video-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .video-background iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 Aspect Ratio */
+      min-height: 100vh;
+      min-width: 177.77vh; /* 16:9 Aspect Ratio */
+      transform: translate(-50%, -50%);
+      opacity: 0.25; /* Cinematic subtle opacity */
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      max-width: 1100px;
+      padding: 0 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 800;
+      color: var(--text-cream);
+      letter-spacing: -0.04em;
+      margin-bottom: 25px;
+      line-height: 0.95;
+    }
+
+    .hero-title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(120px) rotate(5deg);
+      filter: blur(5px);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-family: var(--font-primary);
+      font-weight: 300;
+      color: var(--text-cream-muted);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 45px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .hero-cta {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    /* 3D Services Matrix Section styling */
+    .services-matrix-section {
+      position: relative;
+      background: transparent;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 5%;
+      z-index: 2;
+      border-top: 1px solid var(--border-cream);
+    }
+
+    .services-grid-wrapper {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .matrix-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-cream);
+      padding: 60px 45px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
+      transform-style: preserve-3d;
+    }
+
+    .matrix-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(243, 244, 246, 0.04), transparent 40%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .matrix-card-border {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid transparent;
+      z-index: 10;
+      pointer-events: none;
+      transition: var(--transition-smooth);
+    }
+
+    .matrix-card.gold-theme:hover {
+      border-color: var(--accent-gold-light);
+      box-shadow: 0 15px 40px var(--accent-gold-glow);
+    }
+    .matrix-card.gold-theme:hover .matrix-card-border {
+      border-color: var(--accent-gold);
+    }
+
+    .matrix-card.indigo-theme:hover {
+      border-color: var(--accent-indigo-light);
+      box-shadow: 0 15px 40px var(--accent-indigo-glow);
+    }
+    .matrix-card.indigo-theme:hover .matrix-card-border {
+      border-color: var(--accent-indigo);
+    }
+
+    .card-num {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text-cream-muted);
+      opacity: 0.3;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .matrix-card.gold-theme:hover .card-num {
+      color: var(--accent-gold-light);
+      opacity: 0.8;
+    }
+    .matrix-card.indigo-theme:hover .card-num {
+      color: var(--accent-indigo-light);
+      opacity: 0.8;
+    }
+
+    .card-title {
+      font-size: 2.25rem;
+      margin-bottom: 20px;
+      color: var(--text-cream);
+      letter-spacing: -0.01em;
+      transform: translateZ(30px);
+    }
+
+    .card-description {
+      color: var(--text-cream-muted);
+      line-height: 1.6;
+      font-size: 1rem;
+      font-weight: 300;
+      transform: translateZ(20px);
+      margin-bottom: 40px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transform: translateZ(10px);
+    }
+
+    .card-link i {
+      transition: transform 0.3s;
+    }
+
+    .matrix-card:hover .card-link i {
+      transform: translateX(8px);
+    }
+
+    .matrix-card.gold-theme .card-link {
+      color: var(--accent-gold-light);
+    }
+
+    .matrix-card.indigo-theme .card-link {
+      color: var(--accent-indigo-light);
+    }
+
+    .scroll-down {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-cream-muted);
+      opacity: 0.7;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+    }
+
+    .scroll-down-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text-cream-muted), transparent);
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+      40% { transform: translate(-50%, -10px); }
+      60% { transform: translate(-50%, -5px); }
+    }
+
+    @media (max-width: 1024px) {
+      .matrix-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .matrix-card {
+        padding: 50px 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Cinematic visual overlays and canvas particles -->
+  <div class="film-grain"></div>
+  <canvas id="background-canvas"></canvas>
+  <div class="scanlines"></div>
+  
+  <!-- Cursor elements -->
+  <div class="custom-cursor"></div>
+  <div class="custom-cursor-dot"></div>
+  
+  <!-- Navigation Header bar -->
+  <header class="navbar">
+    <a href="./index.html" class="nav-logo">DM<span>DS</span></a>
+    
+    <div class="mobile-nav-toggle">&#x2630;</div>
+    
+    <nav class="nav-links">
+      <a id="nav-home" href="./index.html" class="nav-item active">Home</a>
+      <a id="nav-portfolio" href="./portfolio.html" class="nav-item">Portfolio</a>
+      <a id="nav-services" href="./services.html" class="nav-item">Services</a>
+      <a id="nav-contact" href="./contact.html" class="nav-item">Contact</a>
+      <a id="nav-initiate" href="./contact.html" class="nav-cta">Initiate Project</a>
+    </nav>
+  </header>
+
+  <!-- Scroll content container wrapper -->
+  <main id="smooth-wrapper">
+    <div id="smooth-content">
+      
+      <!-- HERO (THE CINEMATIC ENGINE) -->
+      <section class="hero-container">
+        
+        <!-- Cinematic YouTube Background Loop (Replace 'uKEC9H12Wns' with your YouTube video ID) -->
+        <div class="video-background">
+          <iframe 
+            src="https://www.youtube.com/embed/uKEC9H12Wns?autoplay=1&mute=1&loop=1&playlist=uKEC9H12Wns&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+          </iframe>
+        </div>
+        
+        <div class="hero-content">
+          <h1 class="hero-title" id="hero-headline">
+            <!-- Split characters are injected dynamically via home.js -->
+          </h1>
+          <p class="hero-subtitle" id="hero-subheadline">Fast websites, search optimization, target ads, and brand design built to grow your business.</p>
+          <div class="hero-cta" id="hero-button-wrap">
+            <a href="#philosophy" class="btn-premium scroll-trigger-btn">
+              Explore Core <i class="fa-solid fa-arrow-down"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="scroll-down" id="scroll-btn">
+          <span>Scroll</span>
+          <div class="scroll-down-line"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: AGENCY PHILOSOPHY -->
+      <section class="philosophy-section scroll-rotate-section" id="philosophy">
+        <div class="philosophy-container">
+          <div class="philosophy-statement reveal-item">
+            We build high-performance websites <span>designed to grow your business.</span> Clean code, top search rankings, and targeted marketing.
+          </div>
+          <div class="philosophy-details reveal-item">
+            <p>We believe your digital presence should drive sales, load instantly, and look professional. We bypass generic templates to build custom layouts and marketing funnels that help your brand stand out and attract customers.</p>
+            <a href="./services.html" class="btn-premium secondary">View Our Services <i class="fa-solid fa-bolt"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: LIVE IMPACT STATISTICS -->
+      <section class="stats-section scroll-rotate-section" id="impact-stats">
+        <div class="stats-grid">
+          
+          <div class="stat-card gold-glow-hover reveal-item">
+            <span class="stat-number" data-target="40">0</span>
+            <span class="stat-label">₹40Cr+ Managed Spend</span>
+          </div>
+          
+          <div class="stat-card indigo-glow-hover reveal-item">
+            <span class="stat-number" data-target="9">0</span>
+            <span class="stat-label">9M+ Leads Generated</span>
+          </div>
+          
+          <div class="stat-card gold-glow-hover reveal-item">
+            <span class="stat-number" data-target="99">0</span>
+            <span class="stat-label">99 Core Web Vitals Speed</span>
+          </div>
+          
+          <div class="stat-card indigo-glow-hover reveal-item">
+            <span class="stat-number" data-target="15">0</span>
+            <span class="stat-label">15+ High-Ticket Brands</span>
+          </div>
+          
+        </div>
+      </section>
+
+      <!-- SECTION 4: SELECTED CASES TEASER -->
+      <section class="portfolio-teaser-section scroll-rotate-section" id="portfolio-teaser">
+        <div class="services-grid-wrapper">
+          <div class="section-header">
+            <span class="section-tag reveal-item">Selected Proof</span>
+            <h2 class="section-title reveal-item glow-text-indigo">High-Ticket Cases</h2>
+            <p class="section-desc reveal-item">A brief look at our elite builds. Sourced directly from our live client deployments.</p>
+          </div>
+          
+          <div class="teaser-row">
+            
+            <div class="teaser-card reveal-item" onclick="location.href='./portfolio.html'">
+              <div class="teaser-img-box">
+                <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800&q=80" alt="Scuba Website Design" class="teaser-img">
+              </div>
+              <div class="teaser-info">
+                <span>Web Engineering // Web3</span>
+                <h3>Scuba Decentralized</h3>
+              </div>
+            </div>
+            
+            <div class="teaser-card reveal-item" onclick="location.href='./portfolio.html'">
+              <div class="teaser-img-box">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Esifr E-commerce Website" class="teaser-img">
+              </div>
+              <div class="teaser-info">
+                <span>E-commerce // API Hub</span>
+                <h3>Esifr E-Commerce Node</h3>
+              </div>
+            </div>
+            
+            <div class="teaser-card reveal-item" onclick="location.href='./portfolio.html'">
+              <div class="teaser-img-box">
+                <img src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?auto=format&fit=crop&w=800&q=80" alt="Majestic Algo Fintech" class="teaser-img">
+              </div>
+              <div class="teaser-info">
+                <span>Software // FinTech</span>
+                <h3>Majestic Algo Interface</h3>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: SERVICES MATRIX -->
+      <section class="services-matrix-section scroll-rotate-section" id="services-matrix">
+        <div class="services-grid-wrapper">
+          <div class="section-header">
+            <span class="section-tag reveal-item">System Core</span>
+            <h2 class="section-title reveal-item glow-text-indigo">Services Matrix</h2>
+            <p class="section-desc reveal-item">Our expertise is divided into four high-performance categories, designed to scale your business and bring you more customers.</p>
+          </div>
+
+          <div class="matrix-grid">
+            
+            <div class="matrix-card gold-theme interactive-card reveal-item" data-tilt>
+              <div class="matrix-card-border"></div>
+              <span class="card-num">01 // CODE</span>
+              <h3 class="card-title">Custom Web Development</h3>
+              <p class="card-description">Fast, custom websites built with clean code. We optimize load speeds and build interactive features to make your site stand out on all screens.</p>
+              <a href="./services.html#web" class="card-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <div class="matrix-card indigo-theme interactive-card reveal-item" data-tilt>
+              <div class="matrix-card-border"></div>
+              <span class="card-num">02 // ADS</span>
+              <h3 class="card-title">Performance Marketing &amp; Ads</h3>
+              <p class="card-description">With over ₹40 Crore in managed ad spend, we build campaigns that target high-intent buyers, drive traffic, and increase your revenue.</p>
+              <a href="./services.html#marketing" class="card-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <div class="matrix-card gold-theme interactive-card reveal-item" data-tilt>
+              <div class="matrix-card-border"></div>
+              <span class="card-num">03 // SEO</span>
+              <h3 class="card-title">Search Engine Optimization</h3>
+              <p class="card-description">Rank higher on Google. We optimize your website code, keywords, and internal links to drive steady organic search traffic to your brand.</p>
+              <a href="./services.html#seo" class="card-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+            <div class="matrix-card indigo-theme interactive-card reveal-item" data-tilt>
+              <div class="matrix-card-border"></div>
+              <span class="card-num">04 // IDENTITY</span>
+              <h3 class="card-title">Brand Strategy &amp; Design</h3>
+              <p class="card-description">Establish a premium brand identity. We design custom logos, typography, visual brand guidelines, and print collateral.</p>
+              <a href="./services.html#branding" class="card-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: TIMELINE EXECUTION ROADMAP -->
+      <section class="timeline-section scroll-rotate-section" id="timeline">
+        <div class="services-grid-wrapper">
+          <div class="section-header">
+            <span class="section-tag reveal-item">System Operations</span>
+            <h2 class="section-title reveal-item glow-text-gold">Execution Roadmap</h2>
+            <p class="section-desc reveal-item">How we work together to audit, build, launch, and optimize your business for the digital market.</p>
+          </div>
+          
+          <div class="timeline-container">
+            
+            <div class="timeline-step reveal-item">
+              <span class="step-number">01 // AUDIT</span>
+              <h3 class="step-title">Auditing &amp; Planning</h3>
+              <p class="step-desc">We review your current website speed, Google search problems, and ad campaigns. Then, we create a clear plan to fix bottlenecks.</p>
+            </div>
+            
+            <div class="timeline-step reveal-item">
+              <span class="step-number">02 // BUILD</span>
+              <h3 class="step-title">Custom Web Development</h3>
+              <p class="step-desc">We build your new website from scratch. Fast load speeds, clean modern layout, responsive design, and smooth animations are standard.</p>
+            </div>
+
+            <div class="timeline-step reveal-item">
+              <span class="step-number">03 // LAUNCH</span>
+              <h3 class="step-title">Marketing Launch &amp; SEO</h3>
+              <p class="step-desc">We set up targeted marketing ads on Meta and Google networks, while optimizing your website to start ranking for key search terms.</p>
+            </div>
+
+            <div class="timeline-step reveal-item">
+              <span class="step-number">04 // OPTIMIZE</span>
+              <h3 class="step-title">Ongoing Optimization</h3>
+              <p class="step-desc">We monitor campaign performance, optimize search indexing, and adjust ad spend to ensure your business keeps growing.</p>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: TESTIMONIAL CAROUSEL -->
+      <section class="testimonials-section scroll-rotate-section" id="testimonials">
+        <div class="services-grid-wrapper">
+          <div class="section-header" style="text-align: center;">
+            <span class="section-tag reveal-item">Client Reviews</span>
+            <h2 class="section-title reveal-item glow-text-indigo">Partner Testimonials</h2>
+          </div>
+          
+          <div class="carousel-viewport">
+            
+            <!-- Testimonial 1 -->
+            <div class="carousel-card active">
+              <p class="carousel-quote">"Ones you work with YourWerbung team, you will know what is quality work. The team is easily available for you. Value for money, value for time. Everything is professional."</p>
+              <div class="carousel-author">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=400&q=80" alt="Dheeraj Jat Avatar" class="carousel-avatar">
+                <div class="carousel-author-info">
+                  <h4>Dheeraj Jat</h4>
+                  <p>Founder, Jail Chai Bar</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="carousel-card">
+              <p class="carousel-quote">"Rahul is a dependable and talented web developer with a rare blend of technical skill and creative thinking. Whether building from scratch or enhancing existing platforms, he works with clarity."</p>
+              <div class="carousel-author">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&h=400&q=80" alt="Samarth Joshi Avatar" class="carousel-avatar">
+                <div class="carousel-author-info">
+                  <h4>Samarth Joshi</h4>
+                  <p>Creative Lead &amp; Influencer</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="carousel-card">
+              <p class="carousel-quote">"I took Rahul's advice for improving the quality of our user acquisition through Meta ads. He is calm, sensible, smart and gives simple actionable advice and insights."</p>
+              <div class="carousel-author">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&h=400&q=80" alt="Ganesh Kumar Avatar" class="carousel-avatar">
+                <div class="carousel-author-info">
+                  <h4>Ganesh Kumar</h4>
+                  <p>Founder, Blind Dating App</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Testimonial 4 -->
+            <div class="carousel-card">
+              <p class="carousel-quote">"Working with Werbung was the best partnership! They are really understanding and open to changes and work as a great team. I would recommend new business to work with them."</p>
+              <div class="carousel-author">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&h=400&q=80" alt="Jivisha Thakare Avatar" class="carousel-avatar">
+                <div class="carousel-author-info">
+                  <h4>Jivisha Thakare</h4>
+                  <p>Founder, Avinya Social Media</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div class="carousel-nav-btns">
+            <div class="carousel-btn" id="prev-review"><i class="fa-solid fa-chevron-left"></i></div>
+            <div class="carousel-btn" id="next-review"><i class="fa-solid fa-chevron-right"></i></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GLOBAL FOOTER -->
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>DM<span>DS</span></h3>
+            <p>Constructing high-end digital legacies through code, ads, search, and design.</p>
+            <div class="footer-socials">
+              <a href="https://www.instagram.com/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.facebook.com/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+              <a href="https://www.linkedin.com/company/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Agency Core</h4>
+            <ul>
+              <li><a href="./index.html">Home Engine</a></li>
+              <li><a href="./portfolio.html">Case Studies</a></li>
+              <li><a href="./services.html">Services Matrix</a></li>
+              <li><a href="./contact.html">Initiate Project</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <ul>
+              <li><a href="./services.html#web">Web Engineering</a></li>
+              <li><a href="./services.html#marketing">Performance Ads</a></li>
+              <li><a href="./services.html#seo">Algorithmic SEO</a></li>
+              <li><a href="./services.html#branding">Brand Building</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact Info</h4>
+            <ul>
+              <li><a href="tel:+919202797157">+91 92027 97157</a></li>
+              <li><a href="mailto:dsdhakadsays@gmail.com">dsdhakadsays@gmail.com</a></li>
+              <li><a href="#">Indore, India</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 DM DS. All rights reserved. Source assets licensed via YourWerbung.</p>
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Disclaimer</a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/gh/darkroomengineering/lenis@1.0.19/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <script src="./js/main.js"></script>
+  <script src="./js/home.js"></script>
+
+</body>
+</html>

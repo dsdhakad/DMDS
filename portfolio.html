@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DM DS | Portfolio Proof</title>
+  <meta name="description" content="Explore DM DS's digital work portfolio. High-ticket custom web builds, marketing designs, and brand systems sourced directly from client benchmarks.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  
+  <style>
+    /* Portfolio specific layout */
+    .portfolio-header {
+      padding: 180px 5% 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    /* Full-screen Dark Overlay to dim page on hover */
+    .portfolio-bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(17, 21, 32, 0.9);
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Floating alternating grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 80px;
+      row-gap: 120px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5% 150px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Offset alternate column cards for visual float dynamic */
+    .portfolio-card:nth-child(even) {
+      transform: translateY(100px);
+    }
+
+    .portfolio-card {
+      position: relative;
+      width: 100%;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: z-index 0.5s;
+    }
+
+    /* Image Wrapper with frame aspect ratio */
+    .portfolio-img-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border: 1px solid var(--border-cream);
+      background-color: var(--bg-secondary);
+      transform-style: preserve-3d;
+      transition: border-color 0.5s;
+    }
+
+    .portfolio-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s;
+      filter: saturate(0.7) brightness(0.95);
+    }
+
+    /* Accent lights and reflections on overlay card hover */
+    .portfolio-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.5s;
+    }
+
+    /* Floating UI Meta Tag elements inside cards */
+    .portfolio-info {
+      margin-top: 30px;
+      transform: translateZ(25px);
+      transition: var(--transition-smooth);
+    }
+
+    .portfolio-tag {
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-gold-light);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .portfolio-title {
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      color: var(--text-cream);
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .portfolio-desc {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text-cream-muted);
+      line-height: 1.6;
+      max-width: 450px;
+    }
+
+    /* Card hover interactions triggers */
+    .portfolio-card:hover {
+      z-index: 10;
+    }
+
+    .portfolio-card:hover .portfolio-img-wrapper {
+      border-color: var(--accent-indigo-light);
+    }
+
+    .portfolio-card:hover .portfolio-img {
+      transform: scale(1.08) translateZ(10px);
+      filter: saturate(1.1) brightness(1.05);
+    }
+
+    .portfolio-card:hover::after {
+      opacity: 1;
+    }
+
+    /* Glow modifications for card components depending on accent tags */
+    .portfolio-card.gold-glow:hover .portfolio-img-wrapper {
+      border-color: var(--accent-gold-light);
+    }
+
+    /* Page-darken state driven by active class */
+    body.project-hovered .portfolio-bg-overlay {
+      opacity: 1;
+    }
+
+    body.project-hovered .portfolio-card:not(:hover) {
+      opacity: 0.25;
+      filter: blur(2px) grayscale(0.5);
+    }
+
+    body.project-hovered .portfolio-card:not(:hover) .portfolio-img-wrapper {
+      border-color: var(--border-cream);
+    }
+
+    /* Responsive styling reflow */
+    @media (max-width: 900px) {
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        row-gap: 80px;
+      }
+      .portfolio-card:nth-child(even) {
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cinematic film grain and background components -->
+  <div class="film-grain"></div>
+  <canvas id="background-canvas"></canvas>
+  <div class="scanlines"></div>
+  
+  <!-- Hover Viewport overlay darken background -->
+  <div class="portfolio-bg-overlay"></div>
+  
+  <!-- Inertial cursor -->
+  <div class="custom-cursor"></div>
+  <div class="custom-cursor-dot"></div>
+
+  <!-- Header navbar navigation -->
+  <header class="navbar">
+    <a href="./index.html" class="nav-logo">DM<span>DS</span></a>
+    <div class="mobile-nav-toggle">&#x2630;</div>
+    <nav class="nav-links">
+      <a id="nav-home" href="./index.html" class="nav-item">Home</a>
+      <a id="nav-portfolio" href="./portfolio.html" class="nav-item active">Portfolio</a>
+      <a id="nav-services" href="./services.html" class="nav-item">Services</a>
+      <a id="nav-contact" href="./contact.html" class="nav-item">Contact</a>
+      <a id="nav-initiate" href="./contact.html" class="nav-cta">Initiate Project</a>
+    </nav>
+  </header>
+
+  <!-- Scroll content container -->
+  <main id="smooth-wrapper">
+    <div id="smooth-content">
+      
+      <!-- Portfolio Intro -->
+      <section class="portfolio-header">
+        <span class="section-tag reveal-item">Our Outputs</span>
+        <h1 class="section-title reveal-item glow-text-indigo">Proof of Performance</h1>
+        <p class="section-desc reveal-item">Explore our work. We build custom websites, online platforms, and branding designs that help business owners grow their brand and get more clients.</p>
+      </section>
+
+      <!-- Alternating Immersive Grid Gallery -->
+      <section class="portfolio-grid">
+
+        <!-- Card 1: Scuba -->
+        <div class="portfolio-card gold-glow interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800&q=80" alt="Scuba Website Design" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Web Engineering // Web3</span>
+            <h2 class="portfolio-title">Scuba</h2>
+            <p class="portfolio-desc">A fast, futuristic website with smooth animations and interactive layouts, designed for easy data browsing in dark mode.</p>
+          </div>
+        </div>
+
+        <!-- Card 2: V Bhatia Associates -->
+        <div class="portfolio-card interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80" alt="V Bhatia Associates Law Firm Website" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Web Development // Custom CRM</span>
+            <h2 class="portfolio-title">V Bhatia Associates</h2>
+            <p class="portfolio-desc">A clean and professional website for a corporate law firm. Includes easy client intake forms and a fast, readable layout.</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Esifr -->
+        <div class="portfolio-card gold-glow interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Esifr E-Commerce Website" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">E-Commerce // API Hub</span>
+            <h2 class="portfolio-title">Esifr</h2>
+            <p class="portfolio-desc">A high-speed e-commerce online store built to show products clearly, load pages instantly, and make checkout quick and easy.</p>
+          </div>
+        </div>
+
+        <!-- Card 4: Majestic Algo -->
+        <div class="portfolio-card interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?auto=format&fit=crop&w=800&q=80" alt="Majestic Algo Software Website" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Software Portal // FinTech</span>
+            <h2 class="portfolio-title">Majestic Algo</h2>
+            <p class="portfolio-desc">A sleek, dark-themed platform designed for finance professionals to track algorithms, charts, and software utilities easily.</p>
+          </div>
+        </div>
+
+        <!-- Card 5: Case Study -->
+        <div class="portfolio-card gold-glow interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80" alt="Case Study Layout" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Creative Strategy // UI/UX</span>
+            <h2 class="portfolio-title">Case Study</h2>
+            <p class="portfolio-desc">A design audit and update that reorganized layout spacing, menu navigation, and buttons to help convert more visitors into clients.</p>
+          </div>
+        </div>
+
+        <!-- Card 6: Urban Luxury Campaign -->
+        <div class="portfolio-card interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="./images/meta-ads-luxury.png" alt="Urban Luxury Suites Lead Gen" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Performance Ads // Lead Generation</span>
+            <h2 class="portfolio-title">Urban Luxury Suites</h2>
+            <p class="portfolio-desc">A high-conversion Meta Ads campaign targeting high-income buyers for luxury estates, generating qualified leads with a 6.8x ROAS.</p>
+          </div>
+        </div>
+
+        <!-- Card 7: Waterfront & Villas Campaign -->
+        <div class="portfolio-card gold-glow interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="./images/meta-ads-waterfront.png" alt="Waterfront & Villas Lead Gen" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Performance Ads // Campaign Scale</span>
+            <h2 class="portfolio-title">Waterfront &amp; Villas</h2>
+            <p class="portfolio-desc">A scaled advertising campaign managing multiple real estate verticals, generating over 100+ leads in 30 days with a 4.5x average ROAS.</p>
+          </div>
+        </div>
+
+        <!-- Card 8: Apex Realty Lead Gen -->
+        <div class="portfolio-card interactive-card reveal-item">
+          <div class="portfolio-img-wrapper">
+            <img src="./images/apex-realty-ads.png" alt="Apex Realty Meta Ads Lead Gen" class="portfolio-img">
+          </div>
+          <div class="portfolio-info">
+            <span class="portfolio-tag">Performance Ads // Lead Generation</span>
+            <h2 class="portfolio-title">Apex Realty</h2>
+            <p class="portfolio-desc">A high-performing Meta Ads lead-generation campaign for a luxury apartments brand, driving consistent qualified leads.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Global Footer -->
+      <footer class="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>DM<span>DS</span></h3>
+            <p>Constructing high-end digital legacies through code, ads, search, and design.</p>
+            <div class="footer-socials">
+              <a href="https://www.instagram.com/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.facebook.com/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+              <a href="https://www.linkedin.com/company/yourwerbung" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Agency Core</h4>
+            <ul>
+              <li><a href="./index.html">Home Engine</a></li>
+              <li><a href="./portfolio.html">Case Studies</a></li>
+              <li><a href="./services.html">Services Matrix</a></li>
+              <li><a href="./contact.html">Initiate Project</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <ul>
+              <li><a href="./services.html#web">Web Engineering</a></li>
+              <li><a href="./services.html#marketing">Performance Ads</a></li>
+              <li><a href="./services.html#seo">Algorithmic SEO</a></li>
+              <li><a href="./services.html#branding">Brand Building</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact Info</h4>
+            <ul>
+              <li><a href="tel:+919202797157">+91 92027 97157</a></li>
+              <li><a href="mailto:dsdhakadsays@gmail.com">dsdhakadsays@gmail.com</a></li>
+              <li><a href="#">Indore, India</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 DM DS. All rights reserved. Source assets licensed via YourWerbung.</p>
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Disclaimer</a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/gh/darkroomengineering/lenis@1.0.19/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <script src="./js/main.js"></script>
+  <script src="./js/portfolio.js"></script>
+
+</body>
+</html>
